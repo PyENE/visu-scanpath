@@ -1,0 +1,15 @@
+# -*- coding: utf-8 -*-
+__author__ = 'Brice Olivier'
+
+X_COL = 'X'
+Y_COL = 'Y'
+SUBJ_COL = 'SUBJ'
+TEXT_COL = 'TEXT'
+FIXATION_DURATION_COL = 'FIXATION_DURATION'
+
+COLOR_LIGHTNESS = 60
+COLOR_SATURATION = 65
+
+RADIUS_SCALE = .1
+LINE_WIDTH = 2
+FONT_SIZE = 15
