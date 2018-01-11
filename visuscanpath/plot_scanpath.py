@@ -44,12 +44,10 @@ def plot_scanpath(dataframe, subj, text, img_path, hue=None, print_col=None,
         raise ValueError('VisuScanpath: failed to identify column containing Y values.')
     if config.FIXATION_DURATION_COL not in dataframe.columns:
         raise ValueError('VisuScanpath: failed to identify column containing FIXATION_DURATION values.')
-    if (type(subj) != str) or not dataframe[config.SUBJ_COL].isin([subj]).any():
+    if not dataframe[config.SUBJ_COL].isin([subj]).any():
         raise ValueError('VisuScanpath: failed to identify subj ' + str(subj))
-
-    if (type(text) != str) or not dataframe[config.TEXT_COL].isin([text]).any():
+    if not dataframe[config.TEXT_COL].isin([text]).any():
         raise ValueError('VisuScanpath: failed to identify text ' + str(text))
-
     if (hue is not None) and (hue not in dataframe.columns):
         raise ValueError('VisuScanpath: failed to identify hue variable ' + str(hue))
 
@@ -59,9 +57,8 @@ def plot_scanpath(dataframe, subj, text, img_path, hue=None, print_col=None,
             if print_col in dataframe.columns:
                 print_col_error = False
         if type(print_col) == list:
-            if all([type(type_str) for type_str in print_col]):
-                if set(print_col).issubset(dataframe.columns):
-                    print_col_error = False
+            if set(print_col).issubset(dataframe.columns):
+                print_col_error = False
         if print_col_error:
             raise ValueError('VisuScanpath: failed to identify print_col variable ' + str(print_col))
 
@@ -91,12 +88,13 @@ def plot_scanpath(dataframe, subj, text, img_path, hue=None, print_col=None,
             legend_label += ' - ' + str(hue)
         draw.text((0, 0), legend_label, 'black', font=font)
 
-    first_fixation_index = dataframe[(dataframe['SUBJ'] == subj) & (dataframe['TEXT'] == text)].index[0]
+    first_fixation_index = dataframe[(dataframe[config.SUBJ_COL] == subj) & \
+                                     (dataframe[config.TEXT_COL] == text)].index[0]
 
-    for fixation_index in dataframe[(dataframe['SUBJ'] == subj) & (dataframe['TEXT'] == text)].index:
-        current_x = int(dataframe.at[fixation_index, 'X'])
-        current_y = int(dataframe.at[fixation_index, 'Y'])
-        fixation_duration = dataframe.at[fixation_index, 'FIXATION_DURATION']
+    for fixation_index in dataframe[(dataframe[config.SUBJ_COL] == subj) & (dataframe[config.TEXT_COL] == text)].index:
+        current_x = int(dataframe.at[fixation_index, config.X_COL])
+        current_y = int(dataframe.at[fixation_index, config.Y_COL])
+        fixation_duration = dataframe.at[fixation_index, config.FIXATION_DURATION_COL]
         radius = int(config.RADIUS_SCALE * fixation_duration)
         color = 'black'
         if hue is not None:
