@@ -7,7 +7,7 @@ import visuscanpath
 
 
 def plot_raw_scanpath(output_file=None):
-    dataframe = pandas.read_csv(os.path.join('..', 'data', 'text_reading.csv'), sep='\t')
+    dataframe = pandas.read_csv(os.path.join('..', 'data', 'text_reading.csv'))
     display = True
     if output_file is not None:
         display = False
@@ -17,7 +17,7 @@ def plot_raw_scanpath(output_file=None):
 
 
 def main():
-    plot_raw_scanpath(output_file='scanpath-s01-art_contemporain-f1.png')
+    plot_raw_scanpath(output_file='scanpaths/s01-art_contemporain-f1.png')
 
 if __name__ == '__main__':
     main()

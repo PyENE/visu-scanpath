@@ -12,7 +12,7 @@ def plot_mono_annotated_scanpath(dataframe, output_file=None):
         display = False
     visuscanpath.plot_scanpath(dataframe, 's01', 'art_contemporain-f1',
                                os.path.join('..', 'images', 'art_contemporain-f1.png'),
-                               print_col='READMODE', output_file=output_file, display=display)
+                               print_col='WORD_INCREMENT', output_file=output_file, display=display)
 
 
 def plot_pluri_annotated_scanpath(dataframe, output_file=None):
@@ -21,13 +21,14 @@ def plot_pluri_annotated_scanpath(dataframe, output_file=None):
         display = False
     visuscanpath.plot_scanpath(dataframe, 's01', 'art_contemporain-f1',
                                os.path.join('..', 'images', 'art_contemporain-f1.png'),
-                               print_col=['WINC', 'CINC'], output_file=output_file, display=display)
+                               print_col=['WORD_INCREMENT', 'CHARACTER_INCREMENT'],
+                               output_file=output_file, display=display)
 
 
 def main():
-    dataframe = pandas.read_csv(os.path.join('..', 'data', 'text_reading.csv'), sep='\t')
-    plot_mono_annotated_scanpath(dataframe, output_file='scanpath-s01-art_contemporain-f1-mono-annotated.png')
-    plot_pluri_annotated_scanpath(dataframe, output_file='scanpath-s01-art_contemporain-f1-pluri-annotated.png')
+    dataframe = pandas.read_csv(os.path.join('..', 'data', 'text_reading.csv'))
+    plot_mono_annotated_scanpath(dataframe, output_file='scanpaths/s01-art_contemporain-f1-mono-annotated.png')
+    plot_pluri_annotated_scanpath(dataframe, output_file='scanpaths/s01-art_contemporain-f1-pluri-annotated.png')
 
 if __name__ == '__main__':
     main()

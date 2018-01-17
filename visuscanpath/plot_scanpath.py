@@ -9,14 +9,14 @@ from PIL import ImageDraw
 from PIL import ImageFont
 
 
-def plot_scanpath(dataframe, subj, text, img_path, hue=None, print_col=None,
+def plot_scanpath(dataframe, subject, text_name, img_path, hue=None, print_col=None,
                   output_file=None, display=True, legend=True):
     """Display a scanpath.
 
     Args:
-        dataframe (pandas.DataFrame): Mandatory columns: ['X', 'Y', 'FIXATION_DURATION', 'SUBJ', 'TEXT'].
-        subj (str): Variable in dataframe corresponding to the subject id.
-        text (str): Variable in dataframe corresponding to the text id.
+        dataframe (pandas.DataFrame): Mandatory columns: ['X', 'Y', 'FIXATION_DURATION', 'SUBJECT', 'TEXT_NAME'].
+        subject (str): Variable in dataframe corresponding to the subject id.
+        text_name (str): Variable in dataframe corresponding to the text id.
         img_path (str): Path to png image.
         hue (str): Variable in dataframe to map fixations to different colors.
         print_col (str or list(str)): Variable[s] in dataframe to display bellow each fixation.
@@ -30,11 +30,11 @@ def plot_scanpath(dataframe, subj, text, img_path, hue=None, print_col=None,
     Examples:
         >>> plot_scanpath(dataframe, 's01', 'art_contemporain-f1', '../images/art_contemporain-f1.png')
         >>> plot_scanpath(dataframe, 's01', 'art_contemporain-f1', \
-                          '../images/art_contemporain-f1.png', print_col='READMODE')
+                          '../images/art_contemporain-f1.png', print_col='WORD_INCREMENT')
         >>> plot_scanpath(dataframe, 's01', 'art_contemporain-f1', \
-                          '../images/art_contemporain-f1.png', print_col=['WINC', 'CINC'])
+                          '../images/art_contemporain-f1.png', print_col=['WORD_INCREMENT', 'CHARACTER_INCREMENT'])
         >>> plot_scanpath(dataframe, 's01', 'art_contemporain-f1', \
-                          '../images/art_contemporain-f1.png', hue='READMODE')
+                          '../images/art_contemporain-f1.png', hue='WORD_INCREMENT')
         >>> plot_scanpath(dataframe, 's01', 'art_contemporain-f1', \
                           '../images/art_contemporain-f1.png', output_file='plot_scanpath.png', display=False)
     """
@@ -44,10 +44,10 @@ def plot_scanpath(dataframe, subj, text, img_path, hue=None, print_col=None,
         raise ValueError('VisuScanpath: failed to identify column containing Y values.')
     if config.FIXATION_DURATION_COL not in dataframe.columns:
         raise ValueError('VisuScanpath: failed to identify column containing FIXATION_DURATION values.')
-    if not dataframe[config.SUBJ_COL].isin([subj]).any():
-        raise ValueError('VisuScanpath: failed to identify subj ' + str(subj))
-    if not dataframe[config.TEXT_COL].isin([text]).any():
-        raise ValueError('VisuScanpath: failed to identify text ' + str(text))
+    if not dataframe[config.SUBJECT_COL].isin([subject]).any():
+        raise ValueError('VisuScanpath: failed to identify subject ' + str(subject))
+    if not dataframe[config.TEXT_NAME_COL].isin([text_name]).any():
+        raise ValueError('VisuScanpath: failed to identify text_name ' + str(text_name))
     if (hue is not None) and (hue not in dataframe.columns):
         raise ValueError('VisuScanpath: failed to identify hue variable ' + str(hue))
 
@@ -81,17 +81,18 @@ def plot_scanpath(dataframe, subj, text, img_path, hue=None, print_col=None,
         font = ImageFont.load_default().font
 
     if legend:
-        legend_label = str(subj) + ' - ' + str(text)
+        legend_label = str(subject) + ' - ' + str(text_name)
         if print_col is not None:
-            legend_label += ' - ' + str(print_col)
+            legend_label += ' - print_col=' + str(print_col)
         if hue is not None:
-            legend_label += ' - ' + str(hue)
+            legend_label += ' - hue=' + str(hue)
         draw.text((0, 0), legend_label, 'black', font=font)
 
-    first_fixation_index = dataframe[(dataframe[config.SUBJ_COL] == subj) & \
-                                     (dataframe[config.TEXT_COL] == text)].index[0]
+    first_fixation_index = dataframe[(dataframe[config.SUBJECT_COL] == subject) &
+                                     (dataframe[config.TEXT_NAME_COL] == text_name)].index[0]
 
-    for fixation_index in dataframe[(dataframe[config.SUBJ_COL] == subj) & (dataframe[config.TEXT_COL] == text)].index:
+    for fixation_index in dataframe[(dataframe[config.SUBJECT_COL] == subject) &
+                                    (dataframe[config.TEXT_NAME_COL] == text_name)].index:
         current_x = int(dataframe.at[fixation_index, config.X_COL])
         current_y = int(dataframe.at[fixation_index, config.Y_COL])
         fixation_duration = dataframe.at[fixation_index, config.FIXATION_DURATION_COL]
