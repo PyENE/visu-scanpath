@@ -3,3 +3,4 @@ dist
 build
 VisuScanpath.egg-info
 *.pyc
+__pycache__
