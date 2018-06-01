@@ -63,13 +63,19 @@ def plot_scanpath(dataframe, subject, text_name, img_path, hue=None, print_col=N
             raise ValueError('VisuScanpath: failed to identify print_col variable ' + str(print_col))
 
     if hue is not None:
-        n_colors = len(dataframe[hue].unique())
-        hues = np.linspace(0, 1, n_colors)[:-1]
+        if dataframe[hue].dtype == int:
+            n_colors = dataframe[hue].max() - dataframe[hue].min() + 1
+        else:
+            n_colors = len(dataframe[hue].unique())
+        hues = np.linspace(0, 1, n_colors + 1)[:-1]
         hues *= 360
         hues = hues.astype(int)
         color_list = ["hsl(" + str(h_i) + ", " + str(config.COLOR_SATURATION)
                       + "%, " + str(config.COLOR_LIGHTNESS) + "%)" for h_i in hues]
-        color_map = dict(zip(dataframe[hue].unique(), color_list))
+        if dataframe[hue].dtype == int:
+            color_map = dict(zip(range(dataframe[hue].min(), dataframe[hue].max()+1), color_list))
+        else:
+            color_map = dict(zip(dataframe[hue].unique(), color_list))
 
     img = Image.open(img_path)
     draw = ImageDraw.Draw(img)
@@ -99,7 +105,7 @@ def plot_scanpath(dataframe, subject, text_name, img_path, hue=None, print_col=N
         radius = int(config.RADIUS_SCALE * fixation_duration)
         color = 'black'
         if hue is not None:
-            current_hue = int(dataframe.at[fixation_index, hue])
+            current_hue = dataframe.at[fixation_index, hue]  # cast int
             color = color_map[current_hue]
         draw.ellipse([current_x - radius, current_y - radius, current_x + radius, current_y + radius],
                      outline=color)
