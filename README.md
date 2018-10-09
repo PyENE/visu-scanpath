@@ -3,7 +3,7 @@
 ## Installation
 
 ```bash
-git clone https://github.com/brice-olivier/visu-scanpath.git
+git clone https://github.com/PyENE/visu-scanpath.git
 cd visu-scanpath
 sudo python setup.py install --user
 ```
