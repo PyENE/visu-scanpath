@@ -1,6 +1,6 @@
 .idea
 dist
 build
-VisuScanpath.egg-info
+visu_scanpath.egg-info
 *.pyc
 __pycache__

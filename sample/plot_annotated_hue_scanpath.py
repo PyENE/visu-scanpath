@@ -7,18 +7,19 @@ import visuscanpath
 
 
 def plot_annotated_hue_scanpath(output_file=None):
-    dataframe = pandas.read_csv(os.path.join('..', 'data', 'text_reading.csv'))
+    dataframe = pandas.read_csv(os.path.join('data', 'text_reading.csv'))
     display = True
     if output_file is not None:
         display = False
-    visuscanpath.plot_scanpath(dataframe, 's01', 'art_contemporain-f1',
-                               os.path.join('..', 'images', 'art_contemporain-f1.png'),
-                               print_col='CHARACTER_INCREMENT', hue='WORD_INCREMENT',
+    visuscanpath.plot_scanpath(dataframe, 's01', 'art_contemporain-f2',
+                               os.path.join('images', 'art_contemporain-f2.png'),
+                               print_col='WINC', hue='PHASE',
                                output_file=output_file, display=display)
 
 
 def main():
-    plot_annotated_hue_scanpath(output_file='scanpaths/s01-art_contemporain-f1-pluri-annotated-hue.png')
+    plot_annotated_hue_scanpath(output_file=os.path.join('scanpaths',
+                                                         's01-art_contemporain-f2-pluri-annotated-hue.png'))
 
 if __name__ == '__main__':
     main()
