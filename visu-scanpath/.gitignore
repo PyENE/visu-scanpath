@@ -1,6 +1,0 @@
-.idea
-dist
-build
-visu_scanpath.egg-info
-*.pyc
-__pycache__
